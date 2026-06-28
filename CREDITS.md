@@ -2,13 +2,15 @@
 
 ## 字体
 - **Fusion Pixel Font（缝合像素字体）** by TakWolf — © 2022 TakWolf (https://takwolf.com)
-  Licensed under the **SIL Open Font License 1.1** (https://openfontlicense.org)。
-  本仓库使用 12px proportional · zh_hans 构建（`public/fonts/fusion-pixel.woff2`）。
+  SIL Open Font License 1.1（商用免费）。`public/fonts/fusion-pixel.woff2`（12px proportional · zh_hans）。
 
-## 像素精灵（全部 CC0 / 公共领域，无需署名，列出以示尊重）
-- **Kenney — Roguelike Characters**（https://kenney.nl/assets/roguelike-characters）— 4 个 NPC 角色（在 CC0 基础上换色区分岗位）。
-- **Kenney — Roguelike Modern City**（https://kenney.nl/assets/roguelike-modern-city）— 办公桌、地板、墙砖。
-- **Kenney — Roguelike Indoors**（https://kenney.nl/assets/roguelike-indoors）— 绿植。
-- 授权：Creative Commons Zero (CC0)。
+## 像素素材（`public/assets/sprites2/`）
+- **家具 / 室内**：**Pixel Agents** by Pablo De Lucca — https://github.com/pablodelucca/pixel-agents
+  License: **MIT**（商用/公开可用，需保留版权声明，见 `public/assets/sprites2/LICENSE-pixel-agents.txt`）。
+  桌/椅/显示器/绿植/书架/咖啡机/会议桌/沙发/墙饰等。
+- **角色（4 个 chibi 同事）**：**Ninja Adventure Asset Pack** by Pixel-Boy & AAA — https://pixel-boy.itch.io/ninja-adventure-asset-pack
+  License: **CC0 1.0**（公共领域，免署名）。取 4 个不同村民正面 idle，按角色色 HSV 换衣色。
+- **派生瓦片**（地板/墙/踢脚/窗/地毯）：基于上述调色板手工制作，**CC0**。
 
-> 注：未使用任何付费/受限或 ripped 美术。后续若引入 LimeZu 等付费素材，勿将原始素材包提交进公开仓库。
+> 全部为 CC0 或 MIT，可公开发布。未使用任何付费/ripped 美术。
+> 注：cozy modern-office 的金标是 LimeZu（itch.io，付费、非 CC0、不可提交进公开仓库）——预算够可升级，本仓库未使用。

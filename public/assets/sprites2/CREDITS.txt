@@ -1,0 +1,38 @@
+Cozy office sprites (sprites2/) — source & license
+==================================================
+Pack: "Pixel Agents" office art (furniture, floors, walls)
+Author: Pablo De Lucca / pixel-agents-hq
+Source: https://github.com/pablodelucca/pixel-agents  (webview-ui/public/assets)
+License: MIT (see LICENSE-pixel-agents.txt). Free for commercial use; keep notice.
+
+How these files were produced
+- Furniture sprites: native pack PNGs upscaled 4x NEAREST (1 src px = 4 dst px).
+- floor_wood / floor_tile: pack grey floor tiles recolored to the pack's own warm
+  wood/beige palette.
+- wall / wall_baseboard / window / rug: DERIVED by us from the pack's exact palette
+  (beige 202,198,185; trim 48,42,40; wood 207,168,109/179,136,87/136,92,71). These
+  derived tiles are our own work, released as CC0; you may keep or drop attribution.
+Note: the upstream repo credits JIK-A-4 (Metro City) for CHARACTER sprites only — we
+did NOT use any characters from this pack, only MIT furniture/floors/walls.
+
+--------------------------------------------------
+Character sprites (char2_boss / manager / sales / clerk + _0/_1 idle frames)
+==================================================
+Pack: "Ninja Adventure - Asset Pack"
+Author: Pixel-Boy & AAA (pixel-boy)
+Source (CC0 mirror used): https://github.com/sparklinlabs/superpowers-asset-packs
+        -> ninja-adventure/characters/{9,6,25,17}.png
+Original / home: https://github.com/pixel-boy/NinjaAdventure  &  https://pixel-boy.itch.io/ninja-adventure-asset-pack
+License: CC0 1.0 (public domain). Attribution not required but appreciated.
+
+How these files were produced (by us)
+- Picked 4 distinct civilian villagers for an office cast:
+    boss=char9 (white-haired elder), manager=char6 (salaryman w/ tie),
+    sales=char25 (casual), clerk=char17 (blonde).
+- Took only the front-facing idle frame (col 0, row 0) of each 64x112 (16x16 grid) sheet.
+- Recolored ONLY each outfit/shirt to its role color via HSV (kept source Value =
+    shading preserved): boss red #c0392b, manager blue #2980b9, sales green #27ae60,
+    clerk purple #8e44ad. Hair/skin/face untouched.
+- Composited on a 16x18 canvas (1px headroom) and upscaled 4x NEAREST -> 64x72 to
+    match the furniture scale. char2_<role>.png == char2_<role>_0.png (rest);
+    char2_<role>_1.png is the same sprite 1px higher (=4px @4x) for a tiny breathing bob.
