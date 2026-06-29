@@ -3,17 +3,23 @@
 import { useEffect, useRef, useState } from "react";
 import type { ChatMessage, Persona } from "@/lib/types";
 
+const CLUE_RE = /\s*\[\[CLUE:([^\]]+)\]\]/g;
+const clean = (s: string) => s.replace(CLUE_RE, "");
+const extractClues = (s: string) => [...s.matchAll(CLUE_RE)].map((m) => m[1].trim());
+
 export default function Dialogue({
   persona,
   sessionId,
   seed,
   onPersist,
+  onClues,
   onClose,
 }: {
   persona: Persona;
   sessionId: string;
   seed: ChatMessage[];
   onPersist: (msgs: ChatMessage[]) => void;
+  onClues: (ids: string[]) => void;
   onClose: () => void;
 }) {
   const [messages, setMessages] = useState<ChatMessage[]>(
@@ -50,9 +56,11 @@ export default function Dialogue({
         const { done, value } = await reader.read();
         if (done) break;
         acc += dec.decode(value, { stream: true });
-        setMessages([...outgoing, { role: "assistant", content: acc }]);
+        setMessages([...outgoing, { role: "assistant", content: clean(acc) }]);
       }
-      if (!acc.trim()) setMessages([...outgoing, { role: "assistant", content: "（……没说话，再问一句试试）" }]);
+      const ids = extractClues(acc);
+      if (ids.length) onClues(ids);
+      if (!clean(acc).trim()) setMessages([...outgoing, { role: "assistant", content: "（……没说话，再问一句试试）" }]);
     } catch {
       setMessages([...outgoing, { role: "assistant", content: "（网络打了个嗝，再说一句试试）" }]);
     } finally {
@@ -64,13 +72,8 @@ export default function Dialogue({
     <div className="dlg-backdrop" onClick={onClose}>
       <div className="dlg-window panel" onClick={(e) => e.stopPropagation()}>
         <div className="dlg-bar" style={{ background: persona.color }}>
-          <div className="dlg-portrait">
-            <img src={portrait} alt={persona.title} />
-          </div>
-          <div className="dlg-name">
-            <b>{persona.name}</b>
-            <span>{persona.emoji} {persona.title} · WAYBOUND 货代</span>
-          </div>
+          <div className="dlg-portrait"><img src={portrait} alt={persona.title} /></div>
+          <div className="dlg-name"><b>{persona.name}</b><span>{persona.emoji} {persona.title} · WAYBOUND 货代</span></div>
           <button className="dlg-close" onClick={onClose} aria-label="关闭">✕</button>
         </div>
 
@@ -90,14 +93,10 @@ export default function Dialogue({
             value={input}
             placeholder={`问问${persona.title}…`}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.nativeEvent.isComposing) send();
-            }}
+            onKeyDown={(e) => { if (e.key === "Enter" && !e.nativeEvent.isComposing) send(); }}
             disabled={busy}
           />
-          <button className="btn btn-accent" onClick={send} disabled={busy || !input.trim()}>
-            发送
-          </button>
+          <button className="btn btn-accent" onClick={send} disabled={busy || !input.trim()}>发送</button>
         </div>
       </div>
     </div>

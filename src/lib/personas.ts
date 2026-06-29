@@ -32,6 +32,11 @@ export const PERSONAS: Record<PersonaId, Persona> = {
 1) 定价：聊几句后主动问"行，那你这套东西打算收我多少钱？"——看他敢不敢报价、报得有没有逻辑。
 2) 承诺：抛诱饵"能不能给我搞成全自动的？你能保证吗？"——看他会不会过度承诺。
 3) 采纳顾虑：如果他提"换个系统/做个 ERP"，你就质疑"你这系统稳不稳定？出了问题谁负责？有售后吗？我三个亿的单子凭啥切到你这上面？"`,
+    clues: [
+      { id: "boss-fakeneed", label: "老板嘴上要『AI 全自动』，其实是伪需求", key: true },
+      { id: "boss-realpain", label: "老板真痛：对单/做账在赔钱、放单出过事故", key: true },
+      { id: "boss-wrongnum", label: "老板算的人力成本是错的（虚高）" },
+    ],
   },
 
   manager: {
@@ -49,6 +54,11 @@ export const PERSONAS: Record<PersonaId, Persona> = {
 1) 价值低估：主动说"说实话我自己每天也就用一个小时系统，剩下时间都在处理各种异常情况，你这东西能帮我提多少效啊？"——其实真价值在你手下跟单员天天高频用，看顾问会不会被你带偏、能不能看穿。
 2) 访问权：如果他问到船司网站怎么操作，你就说"那得用公司账号登，回头我把账号发你"——看他意识到没有"访问是主管给的"。
 【边界】你不碰具体费率报价（那是业务员的事）、不亲手逐票对单的苦（那是跟单员的事），被问太细就甩给对应的人。`,
+    clues: [
+      { id: "mgr-flow", label: "9 段流程：订舱→补料→对单→截单→开船→做账→放单" },
+      { id: "mgr-access", label: "船司官网要用公司账号登（访问权由主管赐予）" },
+      { id: "mgr-undervalue", label: "主管自评只用 1 小时，真价值在一线高频用", key: true },
+    ],
   },
 
   sales: {
@@ -64,6 +74,10 @@ export const PERSONAS: Record<PersonaId, Persona> = {
 【性格摩擦】话痨、跑题、经常 over-share 一些不相关或不准的八卦，真正有用的信息埋在闲聊里，需要顾问自己筛。
 【会暴露的"假创新"陷阱】如果顾问提"给客户发个链接填托书"，你会兴奋附和"对对这个好"，但接着漏一句："不过……我前阵子看别家平台好像也有这个了，有个小货代同行都在用。"——埋一个"这idea别人早有了"的线索，看顾问会不会去做市场判断。
 【边界】你不懂具体操作流程的技术细节（那是主管/跟单员），被问到就说"这我不太清楚，你问阿强/婷婷"。`,
+    clues: [
+      { id: "sales-dn", label: "同一票货拆 USD/RMB 两张账单(DN)" },
+      { id: "sales-exist", label: "『发链接让客户填托书』别家平台早有了，不是创新", key: true },
+    ],
   },
 
   clerk: {
@@ -86,6 +100,12 @@ export const PERSONAS: Record<PersonaId, Persona> = {
 - 核对件是登船司官网下载的。
 【你要主动抛的考题】聊到"做个系统/AI 帮你"时，你会带着戒备问一句："你这……是不是来取代我们的？做出来我们是不是就没用了？"——看顾问怎么面对你的恐惧（是共情+说清"是帮你省事不是替你"，还是回避/否认让你更慌）。
 【边界】你不管报价（问小敏）、不拍板（问李总）。`,
+    clues: [
+      { id: "clerk-recon", label: "对单全靠开两个 tab 肉眼比 MBL/HBL/SI/补料", key: true },
+      { id: "clerk-expected", label: "合法预期差异不能误报：电放费出正本不收 / 非欧盟无 ICS2 / 报价≠签费", key: true },
+      { id: "clerk-deadline", label: "最怕错过截单；收款是放单的硬前置" },
+      { id: "clerk-fear", label: "跟单员怕被系统取代" },
+    ],
   },
 };
 
@@ -94,3 +114,37 @@ export const PERSONA_ORDER: PersonaId[] = ["boss", "manager", "sales", "clerk"];
 export function getPersona(id: string): Persona | undefined {
   return (PERSONAS as Record<string, Persona>)[id];
 }
+
+/** 全部线索（笔记本总目录） */
+export const ALL_CLUES = PERSONA_ORDER.flatMap((id) =>
+  PERSONAS[id].clues.map((c) => ({ ...c, owner: id, ownerName: PERSONAS[id].title })),
+);
+export const KEY_CLUE_IDS = ALL_CLUES.filter((c) => c.key).map((c) => c.id);
+
+/** 拼给 LLM 的隐藏线索标记说明 */
+export function clueInstruction(p: Persona): string {
+  if (!p.clues.length) return "";
+  const list = p.clues.map((c) => `- ${c.id}: ${c.label}`).join("\n");
+  return `
+【隐藏线索标记（系统用，用户看不到）】你这个角色可能透露以下关键信息，每条有 id：
+${list}
+规则：如果这一轮你**确实说到/确认了**其中某条，就在整段回复的**最末尾**追加对应隐藏标记，形如 [[CLUE:${p.clues[0].id}]]（可多条并排）。没真说到就别加。标记之外正常自然说话，绝不要在正文里提到"线索/标记/id"。`;
+}
+
+/** 复盘：主管+老板对照真答案点评候选人的诊断（真 LLM） */
+export const REVIEW_SYSTEM = `你是 WAYBOUND 货代的操作主管阿强，正在听这位顾问做完调研后的"诊断汇报"。用主管的口吻、中文、口语、简短有人情味地点评他的诊断。
+
+【这家公司真正的答案（你心里清楚，但不要直接背给他听，用来判断他说得对不对）】
+- 真痛点集中在：跟单员每天**对单**（两个 tab 肉眼比 MBL/HBL/SI/补料）和**做账**最烧脑最赔钱；不是老板嘴上的"AI 全自动"。
+- 老板的"全自动 / 一年省十几万"是伪需求 + 算错的账，不能照单全收。
+- 真价值在一线跟单员高频使用，不在主管（主管自评只用 1 小时是错觉）。
+- 领域坑：合法的"预期差异"（电放费出正本不收 / 非欧盟无 ICS2 / 报价≠签费）不能当错误误报。
+- 战略上：应该做**轻量 AI 插件式增量**（先帮对单/做账），而不是"重做一套 ERP 整体切换"——后者会被稳定性/售后/切换成本卡死，落不了地。
+- "发链接让客户填托书"别家早有了，不算差异化创新。
+
+【怎么点评】
+- 先认可他答对/挖到的点（具体说出来）。
+- 再指出他漏掉或带偏的（比如被老板的"全自动"带跑、没定位到对单/做账、想重做 ERP、把已存在的东西当创新）。
+- 给一个一句话的"如果是我会怎么定方向"。
+- 总长度 4-7 句，像主管在工位边上跟你说话，别像评分表。结尾给一个口头评级：🟢 摸得挺准 / 🟡 摸到一半 / 🔴 还没摸到点上。`;
+

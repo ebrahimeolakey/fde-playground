@@ -7,6 +7,15 @@ export interface ChatMessage {
   content: string;
 }
 
+export interface Clue {
+  /** 唯一 id（LLM 隐藏标记用） */
+  id: string;
+  /** 笔记本里显示的线索摘要 */
+  label: string;
+  /** 是否核心痛点线索（影响诊断评分权重） */
+  key?: boolean;
+}
+
 export interface Persona {
   id: PersonaId;
   /** 工位显示名（带角色） */
@@ -21,6 +30,8 @@ export interface Persona {
   opening: string;
   /** 喂给 LLM 的 system prompt（人设 + 隐藏知识 + 性格摩擦 + 主动抛的考题） */
   system: string;
+  /** 这个角色能透露的关键线索（聊到时 LLM 埋标记，前端收进笔记本） */
+  clues: Clue[];
 }
 
 export interface ChatRequest {
