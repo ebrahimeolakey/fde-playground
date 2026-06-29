@@ -21,11 +21,12 @@ export default function Dialogue({
   );
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const logRef = useRef<HTMLDivElement>(null);
+  const portrait = `/assets/sprites2/char2_${persona.id}.png`;
 
   useEffect(() => {
     onPersist(messages);
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+    logRef.current?.scrollTo({ top: logRef.current.scrollHeight, behavior: "smooth" });
   }, [messages]); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function send() {
@@ -51,9 +52,7 @@ export default function Dialogue({
         acc += dec.decode(value, { stream: true });
         setMessages([...outgoing, { role: "assistant", content: acc }]);
       }
-      if (!acc.trim()) {
-        setMessages([...outgoing, { role: "assistant", content: "（……没说话，再问一句试试）" }]);
-      }
+      if (!acc.trim()) setMessages([...outgoing, { role: "assistant", content: "（……没说话，再问一句试试）" }]);
     } catch {
       setMessages([...outgoing, { role: "assistant", content: "（网络打了个嗝，再说一句试试）" }]);
     } finally {
@@ -63,26 +62,30 @@ export default function Dialogue({
 
   return (
     <div className="dlg-backdrop" onClick={onClose}>
-      <div className="dlg-panel" onClick={(e) => e.stopPropagation()}>
-        <div className="dlg-head" style={{ background: persona.color }}>
-          <span className="dlg-chip">{persona.emoji}</span>
-          <span className="dlg-name">{persona.name}</span>
-          <button className="dlg-x" onClick={onClose} aria-label="关闭">
-            ✕
-          </button>
+      <div className="dlg-window panel" onClick={(e) => e.stopPropagation()}>
+        <div className="dlg-bar" style={{ background: persona.color }}>
+          <div className="dlg-portrait">
+            <img src={portrait} alt={persona.title} />
+          </div>
+          <div className="dlg-name">
+            <b>{persona.name}</b>
+            <span>{persona.emoji} {persona.title} · WAYBOUND 货代</span>
+          </div>
+          <button className="dlg-close" onClick={onClose} aria-label="关闭">✕</button>
         </div>
 
-        <div className="dlg-body" ref={scrollRef}>
+        <div className="dlg-log" ref={logRef}>
           {messages.map((m, i) => (
-            <div key={i} className={`dlg-row ${m.role}`}>
-              <div className="dlg-bubble">
-                {m.content || (busy && i === messages.length - 1 ? <span className="dlg-typing">…</span> : "")}
+            <div key={i} className={`msg ${m.role}`}>
+              {m.role === "assistant" && <img className="msg-av" src={portrait} alt="" />}
+              <div className={`bubble ${busy && m.role === "assistant" && i === messages.length - 1 && !m.content ? "typing" : ""}`}>
+                {m.content || (busy && i === messages.length - 1 ? "…" : "")}
               </div>
             </div>
           ))}
         </div>
 
-        <div className="dlg-input">
+        <div className="dlg-foot">
           <input
             value={input}
             placeholder={`问问${persona.title}…`}
@@ -92,7 +95,7 @@ export default function Dialogue({
             }}
             disabled={busy}
           />
-          <button onClick={send} disabled={busy || !input.trim()}>
+          <button className="btn btn-accent" onClick={send} disabled={busy || !input.trim()}>
             发送
           </button>
         </div>
