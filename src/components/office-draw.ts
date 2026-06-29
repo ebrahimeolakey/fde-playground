@@ -108,15 +108,25 @@ function drawTracking(ctx: CanvasRenderingContext2D, x: number, y: number, t: nu
   ctx.fillStyle = "#9be58a"; ctx.fillRect(Math.round(x + 8 + ((t / 3400) % 1) * (w - 16)), y + 54, 3, 2); // 卡车
 }
 
-// 前台标语 + WELCOME
-function drawReception(ctx: CanvasRenderingContext2D, im: ImageMap) {
-  blitCB(ctx, im.cabinet, 30, 96);
-  ctx.font = "10px 'Fusion Pixel',monospace"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-  ctx.fillStyle = "#c0392b"; ctx.fillText("客户至上", 38, 116); ctx.fillText("服务全球", 38, 130);
-  // WELCOME 牌
-  ctx.fillStyle = "#2f6b3a"; ctx.fillRect(12, 184, 56, 16);
-  ctx.strokeStyle = "#13351c"; ctx.lineWidth = 1; ctx.strokeRect(12.5, 184.5, 55, 15);
-  ctx.fillStyle = "#eafbe8"; ctx.font = "8px 'Fusion Pixel',monospace"; ctx.fillText("WELCOME", 40, 192);
+// 墙上挂的小木牌
+function drawPlaque(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) {
+  ctx.fillStyle = "rgba(0,0,0,0.18)"; ctx.fillRect(x + 1, y + 2, w, h); // 影
+  ctx.fillStyle = "#caa46a"; ctx.fillRect(x - 1, y - 1, w + 2, h + 2); // 外框木
+  ctx.fillStyle = "#f3e2bf"; ctx.fillRect(x, y, w, h);                 // 牌面
+  ctx.strokeStyle = "#6b4e34"; ctx.lineWidth = 1; ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);
+  ctx.fillStyle = "#8a6a3f"; ctx.fillRect(x + 3, y - 3, 2, 3); ctx.fillRect(x + w - 5, y - 3, 2, 3); // 挂钉
+}
+
+// 前台：标语挂牌 + WELCOME 立牌
+function drawReception(ctx: CanvasRenderingContext2D) {
+  drawPlaque(ctx, 12, 44, 74, 42);
+  ctx.font = "11px 'Fusion Pixel',monospace"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  ctx.fillStyle = "#c0392b"; ctx.fillText("客户至上", 49, 57); ctx.fillText("服务全球", 49, 73);
+  // WELCOME 立牌
+  ctx.fillStyle = "rgba(0,0,0,0.18)"; ctx.fillRect(35, 204, 60, 16);
+  ctx.fillStyle = "#2f6b3a"; ctx.fillRect(34, 202, 60, 16);
+  ctx.strokeStyle = "#13351c"; ctx.lineWidth = 1; ctx.strokeRect(34.5, 202.5, 59, 15);
+  ctx.fillStyle = "#eafbe8"; ctx.font = "9px 'Fusion Pixel',monospace"; ctx.fillText("WELCOME", 64, 210);
 }
 
 let vignette: CanvasGradient | null = null;
@@ -153,12 +163,14 @@ export function drawScene(ctx: CanvasRenderingContext2D, s: DrawState) {
   // 上方两块屏
   drawOrderBoard(ctx, 96, 40);
   drawTracking(ctx, 198, 40, t);
-  // 前台
-  drawReception(ctx, im);
-  // 陈设
-  blitCB(ctx, im.bookshelf, 312, 120);
-  blitCB(ctx, im.sofa, 70, 206); blitCB(ctx, im.side_table, 104, 206);
-  blitCB(ctx, im.plant_large, 372, VH); blitCB(ctx, im.coffee, 300, 196);
+  // 前台（标语挂牌 + WELCOME）
+  drawReception(ctx);
+  // 陈设（靠墙/墙角归位，去杂物）
+  blitCB(ctx, im.bookshelf, 350, 104);   // 右上靠墙书架
+  blitCB(ctx, im.plant, 318, 104);       // 右上小绿植
+  blitCB(ctx, im.plant_large, 16, VH);   // 左下角大绿植
+  blitCB(ctx, im.plant_large, 368, VH);  // 右下角大绿植
+  blitCB(ctx, im.coffee, 108, 216);      // 前台旁饮水机
   // 工位
   const pods = [...s.slots].sort((a, b) => a.y - b.y);
   const frame = t % 760 < 380 ? "0" : "1";
