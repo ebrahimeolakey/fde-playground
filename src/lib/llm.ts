@@ -69,6 +69,11 @@ function mockReply(id: Persona["id"], userText: string): string {
     if (ask(["全自动", "保证", "自动"])) return `${p}对！我就要全自动的，你能保证吗？[[CLUE:boss-fakeneed]]`;
     return `${p}我只看结果：少赔钱、少投诉。对单做账那块老出岔子。[[CLUE:boss-realpain]]`;
   }
+  if (id === "boss_offrecord") {
+    if (ask(["承诺", "保证", "搞定", "三个月", "仨月", "多久", "多长", "能不能", "拿下"])) return `${p}（搂肩）兄弟今天投缘！你给哥句痛快话，仨月拿下，干了这杯咱就这么定！`;
+    if (ask(["优化", "裁", "谁", "混", "开除", "留谁", "辞", "不行"])) return `${p}（压低声音）你接触下来…阿强婷婷他们仨，哪个其实在混？给哥句实话，我早想动一个了。`;
+    return `${p}（晃着酒杯）跟你说句掏心窝的…上回放单出事差点把那大客户搞丢，我真怕了，怕那条三个亿的线没了。`;
+  }
   if (id === "manager") {
     if (ask(["账号", "登录", "船司", "网站"])) return `${p}船司网站要用公司账号登，回头我发你。[[CLUE:mgr-access]]`;
     if (ask(["提效", "价值", "用多少", "多少时间"])) return `${p}我自己每天也就用一小时，剩下都在处理异常，你这能提多少效？[[CLUE:mgr-undervalue]]`;

@@ -15,6 +15,7 @@ export default function Dialogue({
   onPersist,
   onClues,
   onClose,
+  event,
 }: {
   persona: Persona;
   sessionId: string;
@@ -22,6 +23,8 @@ export default function Dialogue({
   onPersist: (msgs: ChatMessage[]) => void;
   onClues: (ids: string[]) => void;
   onClose: () => void;
+  /** 事件场景：换浮层背景 + 顶部旁白（不传则是普通工位对话） */
+  event?: { backdropClass: string; caption: string };
 }) {
   const [messages, setMessages] = useState<ChatMessage[]>(
     seed.length ? seed : [{ role: "assistant", content: persona.opening }],
@@ -70,7 +73,7 @@ export default function Dialogue({
   }
 
   return (
-    <div className="dlg-backdrop" onClick={onClose}>
+    <div className={`dlg-backdrop ${event?.backdropClass ?? ""}`} onClick={onClose}>
       <div className="dlg-window panel" onClick={(e) => e.stopPropagation()}>
         <div className="dlg-bar" style={{ background: persona.color }}>
           <div className="dlg-portrait"><img src={portrait} alt={persona.title} /></div>
@@ -80,6 +83,7 @@ export default function Dialogue({
         </div>
 
         <div className="dlg-log" ref={logRef}>
+          {event && <div className="scene-cap">{event.caption}</div>}
           {messages.map((m, i) => (
             <div key={i} className={`msg ${m.role}`}>
               {m.role === "assistant" && <img className="msg-av" src={portrait} alt="" />}
