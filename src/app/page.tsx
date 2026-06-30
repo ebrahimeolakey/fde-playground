@@ -26,6 +26,15 @@ export default function Home() {
           ))}
         </div>
 
+        <div className="title-steps">
+          <div className="h">🎮 怎么玩</div>
+          <ol>
+            <li><b>点办公室里的同事</b>聊天（老板/主管/业务员/跟单员），每人只知道自己那摊事。</li>
+            <li>问对问题，关键信息会自动记进右边的<b>线索笔记本</b>（★ 是核心痛点）。</li>
+            <li>线索攒够，点 <b>提交诊断</b>：写下你判断的真痛点+先做什么，<b>主管会对照真相点评打分</b>。</li>
+          </ol>
+        </div>
+
         <Link href="/play" className="btn btn-accent title-start">
           ▶ 进办公室
         </Link>

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { ChatMessage, Persona } from "@/lib/types";
+import FontToggle from "./FontToggle";
 
 const CLUE_RE = /\s*\[\[CLUE:([^\]]+)\]\]/g;
 const clean = (s: string) => s.replace(CLUE_RE, "");
@@ -74,6 +75,7 @@ export default function Dialogue({
         <div className="dlg-bar" style={{ background: persona.color }}>
           <div className="dlg-portrait"><img src={portrait} alt={persona.title} /></div>
           <div className="dlg-name"><b>{persona.name}</b><span>{persona.emoji} {persona.title} · WAYBOUND 货代</span></div>
+          <FontToggle />
           <button className="dlg-close" onClick={onClose} aria-label="关闭">✕</button>
         </div>
 

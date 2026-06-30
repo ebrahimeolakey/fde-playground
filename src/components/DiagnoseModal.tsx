@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import FontToggle from "./FontToggle";
 
 export default function DiagnoseModal({
   sessionId,
@@ -49,6 +50,7 @@ export default function DiagnoseModal({
         <div className="dlg-bar" style={{ background: "#b4571c" }}>
           <div className="dlg-portrait"><img src="/assets/sprites2/char2_manager.png" alt="" /></div>
           <div className="dlg-name"><b>提交你的诊断</b><span>📋 主管阿强来听你汇报 · 对照真相点评</span></div>
+          <FontToggle />
           <button className="dlg-close" onClick={onClose} aria-label="关闭">✕</button>
         </div>
 

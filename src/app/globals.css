@@ -7,6 +7,7 @@
 
 :root {
   --pixel: "Fusion Pixel", "Zpix", "Ark Pixel", ui-monospace, "Courier New", monospace;
+  --read: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
   --cream: #f6e8c8;
   --cream-d: #e8d3a3;
   --ink: #4a3526;
@@ -181,3 +182,20 @@ img { image-rendering: pixelated; }
 .cta-btn:disabled { opacity: .5; }
 .exit-link { position: fixed; left: 10px; bottom: 8px; font-size: 11px; color: var(--ink2); text-decoration: none; }
 @media (max-width: 860px) { .invest-body { grid-template-columns: 1fr; } }
+
+/* 字体切换：清晰档（系统圆体），仍保留像素面板外框，不违和 */
+.font-toggle { background: rgba(0,0,0,0.18); border: 2px solid rgba(0,0,0,0.3); color: #fff7e6; border-radius: 6px; padding: 4px 8px; font-size: 11px; font-family: var(--pixel); flex-shrink: 0; cursor: pointer; }
+[data-font="clear"] .bubble,
+[data-font="clear"] .dlg-foot input,
+[data-font="clear"] .dlg-log textarea {
+  font-family: var(--read);
+  -webkit-font-smoothing: antialiased;
+}
+[data-font="clear"] .bubble { font-size: 14.5px; line-height: 1.85; letter-spacing: .2px; }
+
+/* 标题屏「怎么玩」 */
+.title-steps { text-align: left; background: var(--paper); border: 2px solid var(--ink); border-radius: 8px; padding: 10px 13px; margin: 0 0 18px; font-size: 12px; line-height: 1.85; color: var(--ink2); }
+.title-steps .h { font-size: 12px; color: var(--accent-d); margin-bottom: 4px; }
+.title-steps ol { margin: 0; padding-left: 20px; }
+.title-steps li { margin: 3px 0; }
+.title-steps b { color: var(--ink); }
