@@ -29,7 +29,7 @@ export default function Dialogue({
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const logRef = useRef<HTMLDivElement>(null);
-  const portrait = `/assets/sprites2/char2_${persona.id}.png`;
+  const portrait = `/assets/sprites2/char2_${persona.sprite ?? persona.id}.png`;
 
   useEffect(() => {
     onPersist(messages);
