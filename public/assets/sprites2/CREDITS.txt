@@ -36,3 +36,19 @@ How these files were produced (by us)
 - Composited on a 16x18 canvas (1px headroom) and upscaled 4x NEAREST -> 64x72 to
     match the furniture scale. char2_<role>.png == char2_<role>_0.png (rest);
     char2_<role>_1.png is the same sprite 1px higher (=4px @4x) for a tiny breathing bob.
+
+Extra coworkers char2_v1 .. char2_v6 (added later, same CC0 source/method)
+==================================================
+Same pack/author/license as above (Ninja Adventure, Pixel-Boy & AAA, CC0 1.0).
+Source sheets: pixel-boy/NinjaAdventure  ->  chars/{2,3,4,10,12,13}.png
+Picked 6 more distinct civilians, none overlapping the 4 above:
+    v1=char2  (bald, tan skin)            outfit -> slate grey  #6e7b8b
+    v2=char3  (olive/green-grey hair)     outfit -> teal        #14a098
+    v3=char4  (purple-haired woman)       outfit -> magenta     #d6337a
+    v4=char10 (black hair + mustache)     outfit -> indigo      #4b54c8
+    v5=char12 (dark skin, black afro)     outfit -> gold/amber  #e0962a
+    v6=char13 (man in a fedora hat)       outfit -> brown       #7a5230
+Identical pipeline: front idle frame (col0,row0) of each 64x112 (16x16 grid) sheet;
+recolored ONLY the shirt/outfit via HSV keeping source Value (hair/skin/hat/face
+untouched); composited on 16x18 canvas (paste at y=1) and upscaled 4x NEAREST -> 64x72.
+char2_v#.png == char2_v#_0.png (rest); char2_v#_1.png is the sprite 1px higher (4px @4x).

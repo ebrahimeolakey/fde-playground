@@ -1,6 +1,6 @@
 /** 角色 id（key 人设固定；干扰角色为动态 id 如 c1/s1…） */
 export type PersonaId = string;
-export type SpriteKey = "boss" | "manager" | "sales" | "clerk";
+export type SpriteKey = string;
 
 export type Role = "user" | "assistant";
 
