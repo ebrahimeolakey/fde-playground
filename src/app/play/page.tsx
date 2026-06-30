@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import Office from "@/components/Office";
 import Dialogue from "@/components/Dialogue";
 import DiagnoseModal from "@/components/DiagnoseModal";
-import { ALL_CLUES, PERSONAS, PERSONA_ORDER } from "@/lib/personas";
+import { ALL_CLUES, NPCS } from "@/lib/personas";
 import type { ChatMessage, PersonaId } from "@/lib/types";
 
 function newSessionId() {
@@ -20,8 +20,7 @@ export default function Play() {
   const [found, setFound] = useState<Set<string>>(new Set());
   const [diagnose, setDiagnose] = useState(false);
 
-  const talked = (id: PersonaId) => (histories[id] ?? []).some((m) => m.role === "user");
-  const talkedCount = PERSONA_ORDER.filter(talked).length;
+  const talkedCount = Object.keys(histories).filter((id) => (histories[id] ?? []).some((m) => m.role === "user")).length;
   const total = ALL_CLUES.length;
   const ready = talkedCount >= 2 || found.size >= 3;
 
@@ -37,7 +36,7 @@ export default function Play() {
         </div>
         <div className="obj">🎯 <b>目标</b>：摸清这家货代<b>最该先解决</b>的真痛点</div>
         <div className="prog">
-          <span>🗣 已聊 <b>{talkedCount}</b>/4</span>
+          <span>🗣 已聊 <b>{talkedCount}</b> 人</span>
           <span>🔍 线索 <b>{found.size}</b>/{total}</span>
         </div>
       </div>
@@ -80,7 +79,7 @@ export default function Play() {
 
       {active && (
         <Dialogue
-          persona={PERSONAS[active]}
+          persona={NPCS[active]}
           sessionId={sessionId}
           seed={histories[active] ?? []}
           onPersist={(msgs) => setHistories((h) => ({ ...h, [active]: msgs }))}

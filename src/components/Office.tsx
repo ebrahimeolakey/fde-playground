@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { PERSONAS } from "@/lib/personas";
+import { NPCS, ROSTER } from "@/lib/personas";
 import type { PersonaId } from "@/lib/types";
-import { VW, VH, SLOTS, SPRITE_FILES, drawScene, hitTest, type ImageMap, type NpcSlot } from "./office-draw";
+import { VW, VH, SPRITE_FILES, drawScene, hitTest, type ImageMap, type NpcSlot } from "./office-draw";
 
-const slots: NpcSlot[] = SLOTS.map((s) => {
-  const p = PERSONAS[s.id];
-  return { ...s, name: p.title, emoji: p.emoji };
+const slots: NpcSlot[] = ROSTER.map((r) => {
+  const p = NPCS[r.id];
+  return { id: r.id, x: r.x, y: r.y, room: r.room, name: p.title, emoji: p.emoji, sprite: p.sprite ?? "clerk" };
 });
 
 function loadImages(): Promise<ImageMap> {

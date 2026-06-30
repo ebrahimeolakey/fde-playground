@@ -1,4 +1,6 @@
-export type PersonaId = "boss" | "manager" | "sales" | "clerk";
+/** 角色 id（key 人设固定；干扰角色为动态 id 如 c1/s1…） */
+export type PersonaId = string;
+export type SpriteKey = "boss" | "manager" | "sales" | "clerk";
 
 export type Role = "user" | "assistant";
 
@@ -32,6 +34,8 @@ export interface Persona {
   system: string;
   /** 这个角色能透露的关键线索（聊到时 LLM 埋标记，前端收进笔记本） */
   clues: Clue[];
+  /** 绘制用精灵底模（默认 = id） */
+  sprite?: SpriteKey;
 }
 
 export interface ChatRequest {
