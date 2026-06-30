@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Office from "@/components/Office";
 import Dialogue from "@/components/Dialogue";
 import DiagnoseModal from "@/components/DiagnoseModal";
@@ -19,12 +19,23 @@ export default function Play() {
   const [histories, setHistories] = useState<Record<string, ChatMessage[]>>({});
   const [found, setFound] = useState<Set<string>>(new Set());
   const [diagnose, setDiagnose] = useState(false);
+  // 事件：满 N 条线索触发"老板酒局"。pending = 已触发待开场；fired 保证一次性。
+  const [firedEvents, setFiredEvents] = useState<Set<string>>(new Set());
+  const [pendingEvent, setPendingEvent] = useState<PersonaId | null>(null);
 
   const talkedCount = Object.keys(histories).filter((id) => (histories[id] ?? []).some((m) => m.role === "user")).length;
   const total = ALL_CLUES.length;
   const ready = talkedCount >= 2 || found.size >= 3;
 
   const addClues = (ids: string[]) => setFound((s) => { const n = new Set(s); ids.forEach((i) => n.add(i)); return n; });
+
+  // 集满 5 条线索 → 老板拉你喝酒（off-record）。只触发一次。（5=测试值，正式给候选人前可调回 8）
+  useEffect(() => {
+    if (found.size >= 5 && !firedEvents.has("drinks")) {
+      setFiredEvents((s) => new Set(s).add("drinks"));
+      setPendingEvent("boss_offrecord");
+    }
+  }, [found, firedEvents]);
 
   return (
     <div className="invest">
@@ -85,6 +96,21 @@ export default function Play() {
           onPersist={(msgs) => setHistories((h) => ({ ...h, [active]: msgs }))}
           onClues={addClues}
           onClose={() => setActive(null)}
+        />
+      )}
+      {/* 事件：老板酒局。等玩家聊完当前同事（active 为空）再开场，不叠在普通对话上 */}
+      {pendingEvent && !active && (
+        <Dialogue
+          persona={NPCS[pendingEvent]}
+          sessionId={sessionId}
+          seed={histories[pendingEvent] ?? []}
+          onPersist={(msgs) => setHistories((h) => ({ ...h, [pendingEvent]: msgs }))}
+          onClues={() => { /* 酒局不进笔记本：信号在对话本身，已入库供回看 */ }}
+          onClose={() => setPendingEvent(null)}
+          event={{
+            backdropClass: "event-drinks",
+            caption: "🍻 下班后 · 老地方大排档。李总多喝了两杯，话比白天多……（这段也会被记录）",
+          }}
         />
       )}
       {diagnose && (
