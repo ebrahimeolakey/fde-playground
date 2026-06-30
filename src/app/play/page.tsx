@@ -32,7 +32,7 @@ export default function Play() {
       <div className="invest-top panel">
         <div className="brand">
           <span className="ico">✈</span>
-          <span className="t"><b>FDE 货代擂台</b><span>Freight Forwarder Playground</span></span>
+          <span className="t"><b>FDE Playground</b><span>货代驻场摸需求实战</span></span>
         </div>
         <div className="obj">🎯 <b>目标</b>：摸清这家货代<b>最该先解决</b>的真痛点</div>
         <div className="prog">

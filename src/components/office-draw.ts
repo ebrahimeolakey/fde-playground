@@ -141,9 +141,8 @@ export function drawScene(ctx: CanvasRenderingContext2D, s: DrawState) {
   drawReception(ctx);
   drawBossRoom(ctx, im);
   // 开放区陈设
-  blitCB(ctx, im.bookshelf, 336, 118);
-  blitCB(ctx, im.coffee, 300, 118);
   blitCB(ctx, im.plant_large, 16, VH);
+  blitCB(ctx, im.plant_large, 348, VH);
 
   const pods = [...s.slots].sort((a, b) => a.y - b.y);
   const frame = t % 760 < 380 ? "0" : "1";

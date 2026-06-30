@@ -184,7 +184,7 @@ export const NPCS: Record<string, Persona> = {
 export interface RosterEntry { id: string; x: number; y: number; room?: boolean; }
 export const ROSTER: RosterEntry[] = [
   { id: "boss", x: 426, y: 176, room: true },
-  { id: "manager", x: 200, y: 122 },
+  { id: "manager", x: 250, y: 118 },
   // 开放区 2×3（婷婷/小敏=key 混进 4 个干扰里）
   { id: "c1", x: 90, y: 178 }, { id: "clerk", x: 200, y: 178 }, { id: "s1", x: 310, y: 178 },
   { id: "s2", x: 90, y: 258 }, { id: "c2", x: 200, y: 258 }, { id: "sales", x: 310, y: 258 },

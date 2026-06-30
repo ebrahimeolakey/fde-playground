@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "HATCH FDE 货代实战擂台",
+  title: "FDE Playground",
   description: "驻场摸需求 → 搭一个能跑的切片。一场 2-3 小时的 FDE 实战。",
 };
 

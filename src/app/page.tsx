@@ -5,10 +5,10 @@ export default function Home() {
   return (
     <main className="title-screen">
       <div className="title-card panel">
-        <span className="title-kicker">HATCH · FDE 实战擂台</span>
+        <span className="title-kicker">HATCH · FDE Playground</span>
         <h1 className="title-logo">
-          货代驻场
-          <small>你来当那个 FDE — 摸清这家公司，搭出能跑的切片</small>
+          FDE Playground
+          <small>货代驻场 · 你来当那个 FDE，摸清这家公司的真痛点</small>
         </h1>
         <p className="title-sub">
           一家叫 WAYBOUND 的货代公司一团乱，老板请你来「捋一捋」。
