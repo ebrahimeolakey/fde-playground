@@ -1,6 +1,7 @@
 import { getPersona } from "@/lib/personas";
 import { streamChat } from "@/lib/llm";
 import { captureMessage } from "@/lib/store";
+import { inferClueIds } from "@/lib/clueDetection";
 import type { ChatMessage, ChatRequest } from "@/lib/types";
 
 export const runtime = "nodejs";
@@ -41,6 +42,13 @@ export async function POST(req: Request) {
         for await (const delta of streamChat(persona, history)) {
           full += delta;
           controller.enqueue(encoder.encode(delta));
+        }
+        // 兜底：NPC 明明说到某条线索却漏打隐藏标记时，服务端在流末尾补上（前端仍按原逻辑清理+入笔记本）。
+        const inferred = inferClueIds(persona, lastUser?.content ?? "", full);
+        if (inferred.length) {
+          const fallbackTags = inferred.map((id) => `[[CLUE:${id}]]`).join(" ");
+          full += fallbackTags;
+          controller.enqueue(encoder.encode(fallbackTags));
         }
       } catch (e) {
         console.error("[/api/chat] stream error", e);
