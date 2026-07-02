@@ -85,8 +85,8 @@ export default function Dialogue({
       if (clean(acc).trim()) sfx("receive");
       const ids = extractClues(acc);
       if (ids.length) onClues(ids);
-      // 拿到 ★ 核心痛点线索时，对话框抖一下（冲击感；音效在 play 页放）
-      if (ids.some((id) => myClues.some((c) => c.id === id && c.key))) shake(windowRef.current, 6, 320);
+      // 拿到「新的」★ 核心痛点线索时才抖（排除已入袋的——服务端兜底会对重复内容再补标记，不能重复抖；与 play 页的声音去重逻辑一致）
+      if (ids.some((id) => !found.has(id) && myClues.some((c) => c.id === id && c.key))) shake(windowRef.current, 6, 320);
       if (!clean(acc).trim()) setMessages([...outgoing, { role: "assistant", content: "（……没说话，再问一句试试）" }]);
     } catch {
       setMessages([...outgoing, { role: "assistant", content: "（网络打了个嗝，再说一句试试）" }]);
