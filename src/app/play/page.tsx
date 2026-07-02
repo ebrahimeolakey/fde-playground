@@ -7,6 +7,7 @@ import Dialogue from "@/components/Dialogue";
 import DiagnoseModal from "@/components/DiagnoseModal";
 import ShareModal from "@/components/ShareModal";
 import SoundToggle from "@/components/SoundToggle";
+import GitHubLink from "@/components/GitHubLink";
 import { ALL_CLUES, KEY_CLUE_IDS, NPCS } from "@/lib/personas";
 import type { ChatMessage, PersonaId } from "@/lib/types";
 import { sfx } from "@/lib/sfx";
@@ -140,6 +141,7 @@ export default function Play() {
       </div>
 
       <Link href="/" className="exit-link">← 退出</Link>
+      <GitHubLink />
 
       {active && (
         <Dialogue

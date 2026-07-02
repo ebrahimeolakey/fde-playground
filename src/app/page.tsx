@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Office from "@/components/Office";
 import SoundToggle from "@/components/SoundToggle";
+import GitHubLink from "@/components/GitHubLink";
 import { PERSONA_ORDER, PERSONAS } from "@/lib/personas";
 import { sfx } from "@/lib/sfx";
 
@@ -17,6 +18,7 @@ export default function Home() {
       </div>
 
       <SoundToggle className="title-sound" />
+      <GitHubLink />
 
       <div className="title-card panel title-enter">
         <span className="title-kicker">HATCH · FDE Playground</span>

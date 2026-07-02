@@ -217,6 +217,13 @@ img { image-rendering: pixelated; }
 .cta-btn { font-size: 16px; padding: 12px 28px; }
 .cta-btn:disabled { opacity: .5; }
 .exit-link { position: fixed; left: 10px; bottom: 8px; font-size: 11px; color: var(--ink2); text-decoration: none; }
+/* 右下角 GitHub 源码链接：朴素文字（对称于左下角「退出」），不带底色浮窗、不遮挡内容 */
+.gh-link { position: fixed; right: 10px; bottom: 8px; z-index: 40; display: inline-flex; align-items: center; gap: 4px; font-family: var(--pixel); font-size: 11px; color: var(--ink2); text-decoration: none; }
+.gh-link svg { display: block; }
+.gh-link:hover { color: var(--accent-d); }
+/* 深色首屏上用浅字 + 描边，保证可读 */
+.title-screen .gh-link { color: rgba(246,239,226,.9); text-shadow: 0 1px 2px rgba(0,0,0,.55); }
+.title-screen .gh-link:hover { color: #fff; }
 @media (max-width: 860px) { .invest-body { grid-template-columns: 1fr; } }
 
 /* 字体切换：清晰档（系统圆体），仍保留像素面板外框，不违和 */
