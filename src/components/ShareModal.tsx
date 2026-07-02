@@ -15,6 +15,7 @@ export default function ShareModal({ foundCount, onClose }: { foundCount: number
   const [copied, setCopied] = useState(false);
   const text = shareText(foundCount);
   const windowRef = useRef<HTMLDivElement>(null);
+  const close = () => { sfx("close"); onClose(); };
 
   useEffect(() => { sfx("share"); shake(windowRef.current, 7, 380); }, []);
 
@@ -30,11 +31,11 @@ export default function ShareModal({ foundCount, onClose }: { foundCount: number
   };
 
   return (
-    <div className="dlg-backdrop share-backdrop" onClick={onClose}>
+    <div className="dlg-backdrop share-backdrop" onClick={close}>
       <div className="panel share-modal" ref={windowRef} onClick={(e) => e.stopPropagation()}>
         <div className="share-head">
           📕 摸到点门道了！
-          <button className="dlg-close" onClick={onClose} aria-label="关闭">✕</button>
+          <button className="dlg-close" onClick={close} aria-label="关闭">✕</button>
         </div>
         <div className="share-body">
           <p className="share-lead">
@@ -50,7 +51,7 @@ export default function ShareModal({ foundCount, onClose }: { foundCount: number
           </a>
         </div>
         <div className="share-foot">
-          <button className="btn share-later" onClick={onClose}>稍后再说，继续摸需求</button>
+          <button className="btn share-later" onClick={close}>稍后再说，继续摸需求</button>
         </div>
       </div>
     </div>

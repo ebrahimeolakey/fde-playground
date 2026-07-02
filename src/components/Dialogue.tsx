@@ -42,6 +42,7 @@ export default function Dialogue({
   // 这个人身上的线索是否已全部问出（只有带线索的关键同事才会触发，干扰角色/酒局 clues 为空 → 恒 false）
   const myClues = persona.clues ?? [];
   const exhausted = myClues.length > 0 && myClues.every((c) => found.has(c.id));
+  const close = () => { sfx("close"); onClose(); };
 
   useEffect(() => {
     onPersist(messages);
@@ -95,13 +96,13 @@ export default function Dialogue({
   }
 
   return (
-    <div className={`dlg-backdrop ${event?.backdropClass ?? ""}`} onClick={onClose}>
+    <div className={`dlg-backdrop ${event?.backdropClass ?? ""}`} onClick={close}>
       <div className="dlg-window panel" ref={windowRef} onClick={(e) => e.stopPropagation()}>
         <div className="dlg-bar" style={{ background: persona.color }}>
           <div className="dlg-portrait"><img src={portrait} alt={persona.title} /></div>
           <div className="dlg-name"><b>{persona.name}</b><span>{persona.emoji} {persona.title} · WAYBOUND 货代</span></div>
           <FontToggle />
-          <button className="dlg-close" onClick={onClose} aria-label="关闭">✕</button>
+          <button className="dlg-close" onClick={close} aria-label="关闭">✕</button>
         </div>
 
         <div className="dlg-log" ref={logRef}>
